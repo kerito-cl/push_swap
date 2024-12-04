@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:04:18 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/03 19:02:11 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/03 20:20:36 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	*create_array_op2(int arg, char **args)
 	int		i;
 	int		j;
 
-	i = arg - 1;
+	i = arg - 2;
 	j = 0;
 	arr = (int *)malloc(sizeof(int) * (arg - 1));
 	while (i > 0)
@@ -60,6 +60,6 @@ int	*create_array_op2(int arg, char **args)
 		i--;
 		j++;
 	}
-	arr[0] = ft_atoi(args[j + 1]);
+	arr[i] = ft_atoi(args[j + 1]);
 	return (arr);
 }
