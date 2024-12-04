@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:04:18 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/03 20:20:36 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/04 13:01:23 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,42 @@ int	*create_array_op1(char *args, int *count)
 	arr[i] = ft_atoi(split[j]);
 	freesplit(split);
 	return (arr);
+}
+
+void	rotate(int *arr, int *count)
+{
+	int	i;
+	int temp;
+	int	temp2;
+	i = 0;
+	temp = arr[i];
+	arr[i] = arr[*count - 1];
+	i++;
+	while (i < *count)
+	{
+		temp2 = arr[i];
+		arr[i] = temp;
+		i++;
+		temp = temp2;
+	}
+}
+
+void	rotate_reverse(int *arr, int *count)
+{
+	int	i;
+	int temp;
+	int	temp2;
+	i = *count - 1;
+	temp = arr[i];
+	arr[i] = arr[0];
+	i--;
+	while (i >= 0)
+	{
+		temp2 = arr[i];
+		arr[i] = temp;
+		i--;
+		temp = temp2;
+	}
 }
 
 int	*create_array_op2(int arg, char **args)
