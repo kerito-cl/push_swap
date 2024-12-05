@@ -19,6 +19,27 @@
           "ignoreFailures": true
         }
       ]
+    },
+    {
+      "name": "Debug Test",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/${fileBasenameNoExtension}",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "Build and Compile Tests",
+      "miDebuggerPath": "/usr/bin/gdb"
     }
   ]
 }

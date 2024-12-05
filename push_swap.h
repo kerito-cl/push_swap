@@ -14,12 +14,17 @@ typedef struct s_stack
 	int		count_b;
 	int		cheapest_a;
 	int		cheapest_b;
+	int		check1;
+	int		check2;
 	int		mov;
 	int		min_a;
 	int		min_b;
 	int		max_a;
 	int		max_b;
 	int		temp;
+	int		cost_to_b;
+	int		cost_a;
+	int		totalcost;
 }			t_stack;
 
 void	freesplit(char **strs);
