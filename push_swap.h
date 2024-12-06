@@ -12,8 +12,7 @@ typedef struct s_stack
 	int		*b;
 	int		count_a;
 	int		count_b;
-	int		cheapest_a;
-	int		cheapest_b;
+	int		cost_max_to_top;
 	int		check1;
 	int		check2;
 	int		mov;

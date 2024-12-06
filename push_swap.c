@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 17:40:38 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/05 14:50:02 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/06 16:58:58 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,29 +75,38 @@ void p_first_2(t_stack *s)
     s->mov+= 2;
 }
 
-int get_index(int *b, int n, int count)
+int get_index(t_stack *s, int n)
 {
     int *temp;
     int i;
     int j;
     int k;
     
-    i = 0;
-    temp = b;
+    i = s->count_b - 1;
+    temp = s->b;
     k = 0;
-    while (i < count)
+    if (n < s->min_b || n > s->max_b)
+    {
+        while(i >= 0)
+        {
+            if (s->b[i] == s->max_b)
+                return (i);
+            i--;
+        }
+    }
+    while(i >= 0)
     {
         if(n > temp[i])
         {
             k = i;
-            while (i < count)
+            while (i >= 0)
             {
                 if(temp[i] > temp[k] && n > temp[i])
                     k = i;
-                i++;
+                i--;
             }
         }
-        i++;
+        i--;
     }
     return (k);
 }
@@ -106,13 +115,13 @@ int get_cost(int *a, int k, int count, int *check)
 {
         if(k > ((count - 1) - k))
         {
-            *check = 1;
+            *check = 0;
             return ((count - 1) - k);
         }
         else
         {
-            *check = 0;
-            return(k);
+            *check = 1;
+            return(k + 1);
         }
 }
 
@@ -124,12 +133,12 @@ int check_cost(t_stack *s)
     int index;
     int total;
 
-    i = 0;
+    i = s->count_a - 1;
     s->cost_to_b = 0;
     s->cost_a = 0;
-    while (i < s->count_a)
+    while (i >= 0)
     {
-        index = get_index(s->b, s->a[i],s->count_b);
+        index = get_index(s, s->a[i]);
         s->cost_to_b = get_cost(s->b, index, s->count_b, &s->check1);
         s->cost_a = get_cost(s->a, i ,s->count_a, &s->check2);
         if (s->check1 == s->check2)
@@ -139,58 +148,39 @@ int check_cost(t_stack *s)
         }
         else
             s->cost_to_b = s->cost_to_b + s->cost_a;
-        if (i == 0 || s->cost_to_b < prev)
+        if (i == s->count_a - 1 || s->cost_to_b < s->totalcost)
         {
             j = i;
             s->totalcost = s->cost_to_b;
         }
         prev = s->cost_to_b;
-        i++;
+        i--;
     }
     return (j);
 }
 
+
 void algorithm(t_stack *s)
 {
-    int i;
     int j;
     int popped;
     int target;
     int index;
 
-    j = 0;
+
     s->count_b = 0;
     p_first_2(s);
-    target = check_cost(s);
-    index = get_index(s->b, s->a[target], s->count_b);
-    s->cost_to_b = get_cost(s->b, index, s->count_b, &s->check1);
-    s->cost_a = get_cost(s->a, target ,s->count_a, &s->check2);
-    printf("COST TO B %d\n", s->cost_to_b);
-    printf("COST A %d\n", s->cost_a);
-    popped = ft_pop(s->a, &s->count_a);
-    ft_push_b(s->b, &s->count_b, popped);
-    target = check_cost(s);
-    index = get_index(s->b, s->a[target], s->count_b);
-    s->cost_to_b = get_cost(s->b, index, s->count_a, &s->check1);
-    s->cost_a = get_cost(s->a, target ,s->count_a, &s->check2);
-    printf("COST TO B %d\n", s->cost_to_b);
-    printf("COST A %d\n", s->cost_a);
-    popped = ft_pop(s->a, &s->count_a);
-    ft_push_b(s->b, &s->count_b, popped);
-    //i = get_cost(s->a, target, s->count_a,);
-    i = 0;
-    /*while (s->count_a > 3)
+    while (s->count_a > 3)
     {
         target = check_cost(s);
-        index = get_index(s->b, s->a[target], s->count_b);
-        s->cost_to_b = get_cost(s->b, index, s->count_a, &s->check1);
+        index = get_index(s, s->a[target]);
+        s->cost_to_b = get_cost(s->b, index, s->count_b, &s->check1);
         s->cost_a = get_cost(s->a, target ,s->count_a, &s->check2);
-
         while (s->totalcost > 0)
         {
             if (s->check1 == s->check2 && s->check1 == 1)
             {
-                if (s->cost_a > 0 && s->b > 0)
+                if (s->cost_a > 0 && s->cost_to_b > 0)
                 {
                     rotate_reverse(s->a, &s->count_a);
                     rotate_reverse(s->b, &s->count_b);
@@ -199,14 +189,14 @@ void algorithm(t_stack *s)
                     s->totalcost -=1;
                     write (1, "rrr\n", 4);
                 }
-                if (s->cost_a == 0 && s->b > 0)
+                if (s->cost_a == 0 && s->cost_to_b > 0)
                 {
                     rotate_reverse(s->b, &s->count_b);
                     s->cost_to_b-= 1;
                     s->totalcost-=1;
                     write (1, "rrb\n", 4);
                 }
-                if (s->cost_to_b == 0 && s->a > 0)
+                if (s->cost_to_b == 0 && s->cost_a > 0)
                 {
                     rotate_reverse(s->a, &s->count_a);
                     s->cost_a-= 1;
@@ -216,8 +206,7 @@ void algorithm(t_stack *s)
             }
             else if (s->check1 == s->check2 && s->check1 == 0)
             {
-                write (1, "rr\n", 3);
-                if (s->cost_a > 0 && s->b > 0)
+                if (s->cost_a > 0 && s->cost_to_b > 0)
                 {
                     rotate(s->a, &s->count_a);
                     rotate(s->b, &s->count_b);
@@ -226,14 +215,14 @@ void algorithm(t_stack *s)
                     s->totalcost -=1;
                     write (1, "rr\n", 3);
                 }
-                if (s->cost_a == 0 && s->b > 0)
+                if (s->cost_a == 0 && s->cost_to_b > 0)
                 {
                     rotate(s->b, &s->count_b);
                     s->cost_to_b-= 1;
                     s->totalcost-=1;
                     write (1, "rb\n", 3);
                 }
-                if (s->cost_to_b == 0 && s->a > 0)
+                if (s->cost_to_b == 0 && s->cost_a > 0)
                 {
                     rotate(s->a, &s->count_a);
                     s->cost_a-= 1;
@@ -243,9 +232,9 @@ void algorithm(t_stack *s)
             }
             else if (s->check1  == 1 && s->check2 == 0)
             {
-                if (s->cost_a > 0 && s->b > 0)
+                if (s->cost_a > 0 && s->cost_to_b > 0)
                 {
-                    rotate_reverse(s->b, &s->count_a);
+                    rotate_reverse(s->b, &s->count_b);
                     rotate(s->a, &s->count_a);
                     s->cost_to_b-= 1;
                     s->cost_a-= 1;
@@ -253,14 +242,14 @@ void algorithm(t_stack *s)
                     write (1, "rrb\n", 4);
                     write (1, "ra\n", 3);
                 }
-                if (s->cost_a == 0 && s->b > 0)
+                if (s->cost_a == 0 && s->cost_to_b > 0)
                 {
                     rotate_reverse(s->b, &s->count_b);
                     s->cost_to_b-= 1;
                     s->totalcost-=1;
-                    write (1, "rb\n", 3);
+                    write (1, "rrb\n", 3);
                 }
-                if (s->cost_to_b == 0 && s->a > 0)
+                if (s->cost_to_b == 0 && s->cost_a > 0)
                 {
                     rotate(s->a, &s->count_a);
                     s->cost_a-= 1;
@@ -270,7 +259,7 @@ void algorithm(t_stack *s)
             }
             else if (s->check2  == 1 && s->check1 == 0)
             {
-                if (s->cost_a > 0 && s->b > 0)
+                if (s->cost_a > 0 && s->cost_to_b > 0)
                 {
                     rotate_reverse(s->a, &s->count_a);
                     rotate(s->b, &s->count_b);
@@ -280,29 +269,42 @@ void algorithm(t_stack *s)
                     write (1, "rra\n", 4);
                     write (1, "rb\n", 3);
                 }
-                if (s->cost_a == 0 && s->b > 0)
+                if (s->cost_a == 0 && s->cost_to_b > 0)
                 {
                     rotate(s->b, &s->count_b);
                     s->cost_to_b-= 1;
                     s->totalcost-=1;
                     write (1, "rb\n", 3);
                 }
-                if (s->cost_to_b == 0 && s->a > 0)
+                if (s->cost_to_b == 0 && s->cost_a > 0)
                 {
                     rotate_reverse(s->a, &s->count_a);
                     s->cost_a-= 1;
                     s->totalcost-=1;
-                    write (1, "ra\n", 3);
-                    printf("IM HERE");
+                    write (1, "rra\n", 4);
                 }
             }
         }
         popped = ft_pop(s->a, &s->count_a);
         ft_push_b(s->b, &s->count_b, popped);
+        if (s->b[s->count_b - 1] < s->min_b)
+            s->min_b = s->b[s->count_b - 1];
+        else if (s->b[s->count_b - 1] > s->max_b)
+            s->max_b = s->b[s->count_b -1];
         write (1, "pb\n", 3);
-        i++;
-    }*/
-    
+    }
+    j = 0;
+    while (s->max_b != s->b[j])
+        j++;
+    s->cost_max_to_top = get_cost(s->b, j, s->count_b, &s->check1);
+    while (s->cost_max_to_top > 0)
+    {
+        if (s->check1 == 1)
+            rotate_reverse(s->b, &s->count_b);
+        else
+            rotate(s->b, &s->count_b);
+        s->cost_max_to_top-=1;
+    }
 }
 
 int main(int arg, char **args)
@@ -320,30 +322,6 @@ int main(int arg, char **args)
         s.count_a = arg - 1;
     }
     s.b = (int *)malloc(sizeof(int) * s.count_a);
-
-    /*printf(" count %d\n", s.count);
-    int popped;
-    popped = ft_pop(s.a, &s.count);
-    printf(" item popped %d\n",popped);
-    printf(" last element %d\n",s.a[s.count - 1]);
-    printf(" count %d\n",s.count);
-    ft_push(s.a, &s.count, popped);
-    printf(" item pushed %d\n",s.a[s.count - 1]);
-    printf(" new countt %d\n",s.count);*/
-    //ft_swap(s.a, &s.count);
-    /*printf("INITIAL STAck A \n");
-    i =0;
-    printf("\nSTAck B \n");
-    i =0;
-    printf("\nAFTER STAck A \n");
-    while (i < s.count_a)
-    {
-        printf(" %d ", s.a[i]);
-        i++;
-    }*/
-    //algorithm(&s);
-    //rotate_reverse(s.a, &s.count_a);
-    
     algorithm(&s);
     printf("\n");
     i =0;
