@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:40:48 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/08 12:38:27 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/08 15:16:08 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ int	ft_pop(int *arr, int *count)
 
 void	ft_push(int *arr, int *count, int p)
 {
-	int	n;
-
 	arr[*count] = p;
 	*count = *count + 1;
 }

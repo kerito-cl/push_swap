@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 12:23:59 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/08 12:35:15 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/08 15:11:17 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,5 +119,28 @@ void	case4(t_stack *s)
 		s->cost_a -= 1;
 		s->totalcost -= 1;
 		write(1, "rra\n", 4);
+	}
+}
+
+void	case_for_a_stack(t_stack *s, int *lock, int *i)
+{
+	if (s->b[*i] < s->max_a && *lock == 0)
+	{
+		rotate_reverse(s->a, &s->count_a);
+		write(1, "rra\n", 4);
+		*lock = *lock + 1;
+	}
+	if (s->b[*i] < s->mid_a && *lock == 1)
+	{
+		rotate_reverse(s->a, &s->count_a);
+		write(1, "rra\n", 4);
+		*lock = *lock + 1;
+	}
+	if (s->b[*i] < s->min_a && *lock == 2)
+	{
+		s->min_a = s->b[*i];
+		rotate_reverse(s->a, &s->count_a);
+		write(1, "rra\n", 4);
+		*lock = *lock + 1;
 	}
 }

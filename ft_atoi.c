@@ -6,13 +6,13 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 14:48:36 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/03 10:37:58 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/08 18:06:21 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	ft_atoi(const char *str)
+long	ft_atoi(const char *str)
 {
 	int		i;
 	int		n;
@@ -37,5 +37,5 @@ int	ft_atoi(const char *str)
 			return (0);
 		i++;
 	}
-	return ((int)(hold * n));
+	return (hold * n);
 }
