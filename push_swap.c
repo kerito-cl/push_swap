@@ -6,50 +6,12 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 17:40:38 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/06 16:58:58 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/08 12:38:42 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int ft_pop(int *arr, int *count)
-{
-    int n;
-
-    if (*count != 0)
-        n = arr[*count - 1];
-    *count = *count - 1;
-    return (n);
-}
-
-void ft_push(int *arr, int *count, int p)
-{
-    int n;
-
-    if (*count != 0)
-        arr[*count - 1] = p;
-    else
-    *count = *count + 1;
-}
-void ft_push_b(int *arr, int *count, int p)
-{
-    int n;
-
-    arr[*count] = p;
-    *count = *count + 1;
-}
-
-void ft_swap(int *arr, int *count)
-{
-    int temp;
-
-    if (*count >= 2)
-    {
-        temp = arr[*count - 1];
-        arr[*count - 1] =  arr[*count - 2];
-        arr[*count - 2] = temp;
-    }
-}
 
 void p_first_2(t_stack *s)
 {
@@ -57,10 +19,10 @@ void p_first_2(t_stack *s)
     int pop2;
 
     pop1 = ft_pop(s->a, &s->count_a);
-    ft_push_b(s->b, &s->count_b, pop1);
+    ft_push(s->b, &s->count_b, pop1);
     write (1, "pb\n", 3);
     pop2 = ft_pop(s->a, &s->count_a);
-    ft_push_b(s->b, &s->count_b, pop2);
+    ft_push(s->b, &s->count_b, pop2);
     write (1, "pb\n", 3);
     if (s->b[0] > s->b[1])
     {
@@ -72,7 +34,6 @@ void p_first_2(t_stack *s)
         s->max_b = s->b[1];
         s->min_b = s->b[0];
     }
-    s->mov+= 2;
 }
 
 int get_index(t_stack *s, int n)
@@ -129,13 +90,9 @@ int check_cost(t_stack *s)
 {
     int i;
     int j;
-    int prev;
     int index;
-    int total;
 
     i = s->count_a - 1;
-    s->cost_to_b = 0;
-    s->cost_a = 0;
     while (i >= 0)
     {
         index = get_index(s, s->a[i]);
@@ -153,20 +110,81 @@ int check_cost(t_stack *s)
             j = i;
             s->totalcost = s->cost_to_b;
         }
-        prev = s->cost_to_b;
         i--;
     }
     return (j);
 }
 
+void sort_a_stack(t_stack *s)
+{
+    set_max(s);
+    if (s->a[2] == s->max_a)
+    {
+        rotate(s->a, &s->count_a);
+        write(1, "ra\n", 3);
+    }
+    if (s->a[0] < s->a[2])
+    {
+        rotate_reverse(s->a, &s->count_a);
+        write(1, "rra\n", 4);
+    }
+    if (s->a[1] < s->a[2] || s->max_a == s->a[1])
+    {
+        ft_swap(s->a, &s->count_a);
+        write(1, "sa\n", 3);
+    }
+    if (s->a[2] == s->max_a)
+    {
+        rotate(s->a, &s->count_a);
+        write(1, "ra\n", 3);
+    }
+    s->min_a = s->a[2];
+    s->mid_a = s->a[1];
+}
+void    push_to_a(t_stack *s)
+{
+    int i;
+    int lock;
+
+    lock = 0;
+    i = s->count_b - 1;
+    while (i >= 0)
+    {
+        if (s->b[i] < s->max_a && lock == 0)
+        {
+            rotate_reverse(s->a, &s->count_a);
+            write(1, "rra\n", 4);
+            lock++;
+        }
+        if (s->b[i] < s->mid_a && lock == 1)
+        {
+            rotate_reverse(s->a, &s->count_a);
+            write(1, "rra\n", 4);
+            lock++;
+        }
+        if (s->b[i] < s->min_a && lock == 2)
+        {
+            s->min_a = s->b[i];
+            rotate_reverse(s->a, &s->count_a);
+            write(1, "rra\n", 4);
+            lock++;
+        }
+        ft_push(s->a, &s->count_a, ft_pop(s->b, &s->count_b));
+        write(1, "pa\n", 3);
+        i--;
+    }
+    if (s->a[0] < s->a[s->count_a - 1])
+    {
+            rotate_reverse(s->a, &s->count_a);
+            write(1, "rra\n", 4);
+    }
+}
 
 void algorithm(t_stack *s)
 {
     int j;
-    int popped;
     int target;
     int index;
-
 
     s->count_b = 0;
     p_first_2(s);
@@ -179,114 +197,15 @@ void algorithm(t_stack *s)
         while (s->totalcost > 0)
         {
             if (s->check1 == s->check2 && s->check1 == 1)
-            {
-                if (s->cost_a > 0 && s->cost_to_b > 0)
-                {
-                    rotate_reverse(s->a, &s->count_a);
-                    rotate_reverse(s->b, &s->count_b);
-                    s->cost_to_b-= 1;
-                    s->cost_a-= 1;
-                    s->totalcost -=1;
-                    write (1, "rrr\n", 4);
-                }
-                if (s->cost_a == 0 && s->cost_to_b > 0)
-                {
-                    rotate_reverse(s->b, &s->count_b);
-                    s->cost_to_b-= 1;
-                    s->totalcost-=1;
-                    write (1, "rrb\n", 4);
-                }
-                if (s->cost_to_b == 0 && s->cost_a > 0)
-                {
-                    rotate_reverse(s->a, &s->count_a);
-                    s->cost_a-= 1;
-                    s->totalcost-=1;
-                    write (1, "rra\n", 4);
-                }
-            }
+                case1(s);
             else if (s->check1 == s->check2 && s->check1 == 0)
-            {
-                if (s->cost_a > 0 && s->cost_to_b > 0)
-                {
-                    rotate(s->a, &s->count_a);
-                    rotate(s->b, &s->count_b);
-                    s->cost_to_b-= 1;
-                    s->cost_a-= 1;
-                    s->totalcost -=1;
-                    write (1, "rr\n", 3);
-                }
-                if (s->cost_a == 0 && s->cost_to_b > 0)
-                {
-                    rotate(s->b, &s->count_b);
-                    s->cost_to_b-= 1;
-                    s->totalcost-=1;
-                    write (1, "rb\n", 3);
-                }
-                if (s->cost_to_b == 0 && s->cost_a > 0)
-                {
-                    rotate(s->a, &s->count_a);
-                    s->cost_a-= 1;
-                    s->totalcost-=1;
-                    write (1, "ra\n", 3);
-                }
-            }
+                case2(s);
             else if (s->check1  == 1 && s->check2 == 0)
-            {
-                if (s->cost_a > 0 && s->cost_to_b > 0)
-                {
-                    rotate_reverse(s->b, &s->count_b);
-                    rotate(s->a, &s->count_a);
-                    s->cost_to_b-= 1;
-                    s->cost_a-= 1;
-                    s->totalcost -=2;
-                    write (1, "rrb\n", 4);
-                    write (1, "ra\n", 3);
-                }
-                if (s->cost_a == 0 && s->cost_to_b > 0)
-                {
-                    rotate_reverse(s->b, &s->count_b);
-                    s->cost_to_b-= 1;
-                    s->totalcost-=1;
-                    write (1, "rrb\n", 3);
-                }
-                if (s->cost_to_b == 0 && s->cost_a > 0)
-                {
-                    rotate(s->a, &s->count_a);
-                    s->cost_a-= 1;
-                    s->totalcost-=1;
-                    write (1, "ra\n", 3);
-                }
-            }
+                case3(s);
             else if (s->check2  == 1 && s->check1 == 0)
-            {
-                if (s->cost_a > 0 && s->cost_to_b > 0)
-                {
-                    rotate_reverse(s->a, &s->count_a);
-                    rotate(s->b, &s->count_b);
-                    s->cost_to_b-= 1;
-                    s->cost_a-= 1;
-                    s->totalcost -=2;
-                    write (1, "rra\n", 4);
-                    write (1, "rb\n", 3);
-                }
-                if (s->cost_a == 0 && s->cost_to_b > 0)
-                {
-                    rotate(s->b, &s->count_b);
-                    s->cost_to_b-= 1;
-                    s->totalcost-=1;
-                    write (1, "rb\n", 3);
-                }
-                if (s->cost_to_b == 0 && s->cost_a > 0)
-                {
-                    rotate_reverse(s->a, &s->count_a);
-                    s->cost_a-= 1;
-                    s->totalcost-=1;
-                    write (1, "rra\n", 4);
-                }
-            }
+                case4(s);
         }
-        popped = ft_pop(s->a, &s->count_a);
-        ft_push_b(s->b, &s->count_b, popped);
+        ft_push(s->b, &s->count_b, ft_pop(s->a, &s->count_a));
         if (s->b[s->count_b - 1] < s->min_b)
             s->min_b = s->b[s->count_b - 1];
         else if (s->b[s->count_b - 1] > s->max_b)
@@ -300,11 +219,19 @@ void algorithm(t_stack *s)
     while (s->cost_max_to_top > 0)
     {
         if (s->check1 == 1)
+        {
             rotate_reverse(s->b, &s->count_b);
+            write (1, "rrb\n", 4);
+        }
         else
+        {
             rotate(s->b, &s->count_b);
+            write (1, "rb\n", 3);
+        }
         s->cost_max_to_top-=1;
     }
+    sort_a_stack(s);
+    push_to_a(s);
 }
 
 int main(int arg, char **args)
@@ -323,9 +250,8 @@ int main(int arg, char **args)
     }
     s.b = (int *)malloc(sizeof(int) * s.count_a);
     algorithm(&s);
-    printf("\n");
     i =0;
-    while (i < s.count_b)
+    /*while (i < s.count_b)
     {
         printf(" %d ", s.b[i]);
         i++;
@@ -336,5 +262,5 @@ int main(int arg, char **args)
     {
         printf(" %d ", s.a[i]);
         i++;
-    }
+    }*/
 }
