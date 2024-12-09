@@ -6,17 +6,17 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 14:48:36 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/08 18:06:21 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/09 09:44:51 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-long	ft_atoi(const char *str)
+int64_t	ft_atoi(const char *str)
 {
 	int		i;
 	int		n;
-	long	hold;
+	int64_t	hold;
 
 	i = 0;
 	n = 1;

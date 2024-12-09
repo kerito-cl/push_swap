@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 17:40:38 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/08 18:02:45 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/09 15:24:35 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	get_index(t_stack *s, int n)
 	int	k;
 
 	i = s->count_b - 1;
-	k = 0;
+	k = -1;
 	if (n < s->min_b || n > s->max_b)
 	{
 		while (i >= 0)
@@ -32,7 +32,7 @@ int	get_index(t_stack *s, int n)
 	{
 		if (n > s->b[i])
 		{
-			if (k == 0 || s->b[i] > s->b[k])
+			if (k == -1 || s->b[i] > s->b[k])
 				k = i;
 		}
 		i--;
@@ -89,7 +89,8 @@ void	algorithm(t_stack *s)
 	int	index;
 
 	s->count_b = 0;
-	p_first_2(s);
+	if (s->count_a > 3)
+		p_first_2(s);
 	while (s->count_a > 3)
 	{
 		target = check_cost(s);
@@ -98,7 +99,8 @@ void	algorithm(t_stack *s)
 		s->cost_a = get_cost(target, s->count_a, &s->check2);
 		push_to_b(s);
 	}
-	max_to_top(s);
+	if (s->count_b > 1)
+		max_to_top(s);
 	sort_a_stack(s);
 	push_to_a(s);
 }
@@ -107,19 +109,16 @@ int	main(int arg, char **args)
 {
 	t_stack	s;
 
-	if (arg < 2)
+	if (arg < 2 || ft_strlen(args[1]) == 0)
 	{
 		write(1, "Error\n", 6);
 		return (0);
 	}
-	if (arg == 2)
-		s.a = create_array_op1(args[1], &s.count_a);
-	if (arg > 2)
+	parse(arg, args, &s);
+	if (check_if_sorted(&s) == 0)
 	{
-		s.a = create_array_op2(arg, args);
-		if (s.a == NULL)
-			return (0);
-		s.count_a = arg - 1;
+		free(s.a);
+		return (0);
 	}
 	s.b = (int *)malloc(sizeof(int) * s.count_a);
 	algorithm(&s);

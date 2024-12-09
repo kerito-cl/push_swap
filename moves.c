@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 14:13:13 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/08 15:16:40 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/09 15:20:12 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,17 +113,23 @@ void	p_first_2(t_stack *s)
 	pop1 = ft_pop(s->a, &s->count_a);
 	ft_push(s->b, &s->count_b, pop1);
 	write(1, "pb\n", 3);
-	pop2 = ft_pop(s->a, &s->count_a);
-	ft_push(s->b, &s->count_b, pop2);
-	write(1, "pb\n", 3);
-	if (s->b[0] > s->b[1])
+	if (s->count_a > 4)
 	{
-		s->max_b = s->b[0];
-		s->min_b = s->b[1];
+		pop2 = ft_pop(s->a, &s->count_a);
+		ft_push(s->b, &s->count_b, pop2);
+		write(1, "pb\n", 3);
 	}
-	else
+	if (s->count_a > 4)
 	{
-		s->max_b = s->b[1];
-		s->min_b = s->b[0];
+		if (s->b[0] > s->b[1])
+		{
+			s->max_b = s->b[0];
+			s->min_b = s->b[1];
+		}
+		else
+		{
+			s->max_b = s->b[1];
+			s->min_b = s->b[0];
+		}
 	}
 }

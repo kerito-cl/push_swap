@@ -1,7 +1,7 @@
 
 NAME = push_swap
 SOURCES = push_swap.c ft_split.c ft_atoi.c cases.c \
-			utils.c moves.c create_arr.c
+			utils.c moves.c create_arr.c parsing.c
 OFILES = $(SOURCES:.c=.o)
 CC = cc
 FLAGS = -Wall -Wextra -Werror

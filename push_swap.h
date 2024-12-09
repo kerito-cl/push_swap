@@ -6,17 +6,18 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 14:24:40 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/08 18:14:47 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/09 14:57:37 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
+# include <limits.h>
+# include <stdint.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <limits.h>
 
 typedef struct s_stack
 {
@@ -61,4 +62,8 @@ void	push_to_b(t_stack *s);
 void	max_to_top(t_stack *s);
 int		get_cost(int k, int count, int *check);
 void	p_first_2(t_stack *s);
+void	parse(int arg, char **args, t_stack *s);
+int		check_if_sorted(t_stack *s);
+int		ft_strlen(char *s);
+
 #endif
