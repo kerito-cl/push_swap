@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 17:40:38 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/09 15:24:35 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/11 15:37:55 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,8 @@ int	main(int arg, char **args)
 
 	if (arg < 2 || ft_strlen(args[1]) == 0)
 	{
-		write(1, "Error\n", 6);
-		return (0);
+		write(2, "Error\n", 6);
+		return (1);
 	}
 	parse(arg, args, &s);
 	if (check_if_sorted(&s) == 0)
@@ -121,6 +121,11 @@ int	main(int arg, char **args)
 		return (0);
 	}
 	s.b = (int *)malloc(sizeof(int) * s.count_a);
+	if (s.b == NULL)
+	{
+		free(s.a);
+		return (1);
+	}
 	algorithm(&s);
 	free(s.a);
 	free(s.b);

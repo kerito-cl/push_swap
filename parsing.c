@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 18:05:04 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/09 15:01:48 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/11 16:03:19 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,15 @@ int	check_if_sorted(t_stack *s)
 		{
 			if (s->a[i] == s->a[j])
 			{
-				write(1, "Error\n", 6);
+				write(2, "Error\n", 6);
 				free(s->a);
 				exit(0);
 			}
+			j--;
+		}
+		j = i - 1;
+		while (j >= 0)
+		{
 			if (s->a[i] > s->a[j])
 				return (1);
 			j--;
@@ -55,6 +60,8 @@ int	check_nums_case_1(char *str)
 	int		j;
 
 	split = ft_split(str, ' ');
+	if (split == NULL)
+		return (2);
 	i = 0;
 	while (split[i])
 	{
@@ -105,9 +112,11 @@ void	parse(int arg, char **args, t_stack *s)
 	{
 		if (check_nums_case_1(args[1]) == 0)
 		{
-			write(1, "Error\n", 6);
+			write(2, "Error\n", 6);
 			exit(0);
 		}
+		else if (check_nums_case_1(args[1]) == 2)
+			exit(0);
 		s->a = create_array_op1(args[1], &s->count_a);
 		if (s->a == NULL)
 			exit(0);
@@ -116,7 +125,7 @@ void	parse(int arg, char **args, t_stack *s)
 	{
 		if (check_nums_case_2(args) == 0)
 		{
-			write(1, "Error\n", 6);
+			write(2, "Error\n", 6);
 			exit(0);
 		}
 		s->a = create_array_op2(arg, args);
