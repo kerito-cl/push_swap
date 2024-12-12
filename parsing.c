@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 18:05:04 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/11 16:03:19 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/12 16:05:15 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_strlen(char *s)
 	return (i);
 }
 
-int	check_if_sorted(t_stack *s)
+int	check_if_repeated(t_stack *s)
 {
 	int	i;
 	int	j;
@@ -39,13 +39,6 @@ int	check_if_sorted(t_stack *s)
 				free(s->a);
 				exit(0);
 			}
-			j--;
-		}
-		j = i - 1;
-		while (j >= 0)
-		{
-			if (s->a[i] > s->a[j])
-				return (1);
 			j--;
 		}
 		i--;
@@ -68,9 +61,7 @@ int	check_nums_case_1(char *str)
 		j = 0;
 		while (split[i][j])
 		{
-			if (((split[i][j] < '0' || split[i][j] > '9') && split[i][j] != ' '
-					&& split[i][j] != '-' && split[i][j] != '+') || j > 11
-				|| ft_atoi(split[i]) > INT_MAX || ft_atoi(split[i]) < INT_MIN)
+			if (check_errors(split, i, &j) == 0)
 			{
 				freesplit(split);
 				return (0);
@@ -94,10 +85,7 @@ int	check_nums_case_2(char **str)
 		j = 0;
 		while (str[i + 1][j])
 		{
-			if (((str[i + 1][j] < '0' || str[i + 1][j] > '9') && str[i
-					+ 1][j] != '-' && str[i + 1][j] != '+') || j > 11
-				|| ft_atoi(str[i + 1]) > INT_MAX || ft_atoi(str[i
-					+ 1]) < INT_MIN)
+			if (check_errors2(str, i + 1, &j) == 0)
 				return (0);
 			j++;
 		}

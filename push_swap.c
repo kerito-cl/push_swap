@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 17:40:38 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/11 15:37:55 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/12 16:03:26 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ void	algorithm(t_stack *s)
 	int	index;
 
 	s->count_b = 0;
+	s->max_b = 0;
+	s->min_b = 0;
 	if (s->count_a > 3)
 		p_first_2(s);
 	while (s->count_a > 3)
@@ -110,11 +112,9 @@ int	main(int arg, char **args)
 	t_stack	s;
 
 	if (arg < 2 || ft_strlen(args[1]) == 0)
-	{
-		write(2, "Error\n", 6);
-		return (1);
-	}
+		return (0);
 	parse(arg, args, &s);
+	check_if_repeated(&s);
 	if (check_if_sorted(&s) == 0)
 	{
 		free(s.a);

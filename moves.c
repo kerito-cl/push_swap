@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 14:13:13 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/09 15:20:12 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/12 16:04:25 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	push_to_a(t_stack *s)
 	int	lock;
 
 	lock = 0;
+	i = 0;
 	i = s->count_b - 1;
 	while (i >= 0)
 	{
@@ -53,7 +54,7 @@ void	push_to_a(t_stack *s)
 		write(1, "pa\n", 3);
 		i--;
 	}
-	if (s->a[0] < s->a[s->count_a - 1])
+	while (s->a[0] < s->a[s->count_a - 1])
 	{
 		rotate_reverse(s->a, &s->count_a);
 		write(1, "rra\n", 4);
@@ -113,14 +114,10 @@ void	p_first_2(t_stack *s)
 	pop1 = ft_pop(s->a, &s->count_a);
 	ft_push(s->b, &s->count_b, pop1);
 	write(1, "pb\n", 3);
-	if (s->count_a > 4)
+	if (s->count_a > 3)
 	{
 		pop2 = ft_pop(s->a, &s->count_a);
 		ft_push(s->b, &s->count_b, pop2);
-		write(1, "pb\n", 3);
-	}
-	if (s->count_a > 4)
-	{
 		if (s->b[0] > s->b[1])
 		{
 			s->max_b = s->b[0];
@@ -131,5 +128,6 @@ void	p_first_2(t_stack *s)
 			s->max_b = s->b[1];
 			s->min_b = s->b[0];
 		}
+		write(1, "pb\n", 3);
 	}
 }

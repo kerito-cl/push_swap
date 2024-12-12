@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 14:24:40 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/09 14:57:37 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/12 16:01:02 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,8 @@ void	p_first_2(t_stack *s);
 void	parse(int arg, char **args, t_stack *s);
 int		check_if_sorted(t_stack *s);
 int		ft_strlen(char *s);
+int		check_errors(char **str, int i, int *j);
+int		check_errors2(char **str, int i, int *j);
+int		check_if_repeated(t_stack *s);
 
 #endif

@@ -6,11 +6,31 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:04:18 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/08 18:09:53 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/12 15:46:43 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+int	check_if_sorted(t_stack *s)
+{
+	int	i;
+	int	j;
+
+	i = s->count_a - 1;
+	while (i > 0)
+	{
+		j = i - 1;
+		while (j >= 0)
+		{
+			if (s->a[i] > s->a[j])
+				return (1);
+			j--;
+		}
+		i--;
+	}
+	return (0);
+}
 
 int	*create_array_op1(char *args, int *count)
 {

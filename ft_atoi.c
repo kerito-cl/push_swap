@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 14:48:36 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/09 09:44:51 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/12 16:04:46 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,26 @@ int64_t	ft_atoi(const char *str)
 		i++;
 	}
 	return (hold * n);
+}
+
+int	check_errors(char **str, int i, int *j)
+{
+	if (str[i][*j] == '-' || str[i][*j] == '+')
+		*j = *j + 1;
+	if (((str[i][*j] < '0' || str[i][*j] > '9') && str[i][*j] != ' ') || *j > 11
+		|| ft_atoi(str[i]) > INT_MAX || ft_atoi(str[i]) < INT_MIN)
+		return (0);
+	else
+		return (1);
+}
+
+int	check_errors2(char **str, int i, int *j)
+{
+	if (str[i][*j] == '-' || str[i][*j] == '+')
+		*j = *j + 1;
+	if (((str[i][*j] < '0' || str[i][*j] > '9')) || *j > 11
+		|| ft_atoi(str[i]) > INT_MAX || ft_atoi(str[i]) < INT_MIN)
+		return (0);
+	else
+		return (1);
 }
