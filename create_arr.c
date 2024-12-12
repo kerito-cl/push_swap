@@ -6,7 +6,7 @@
 /*   By: mquero <mquero@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 12:04:18 by mquero            #+#    #+#             */
-/*   Updated: 2024/12/12 15:46:43 by mquero           ###   ########.fr       */
+/*   Updated: 2024/12/12 16:08:20 by mquero           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ int	*create_array_op1(char *args, int *count)
 	*count = 0;
 	j = 0;
 	split = ft_split(args, ' ');
+	if (split == NULL)
+		return (NULL);
 	while (split[*count])
 		*count += 1;
 	i = *count - 1;
